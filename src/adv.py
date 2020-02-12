@@ -58,7 +58,7 @@ def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-player = Player('treasure', playing=1)
+player = Player(room['outside'], playing=1)
 
 possible_moves = {
     'n': 'n_to',
@@ -69,24 +69,35 @@ possible_moves = {
 
 while player.playing == 1:
 
+    # Getting player input
     player_input = input('Enter a cardinal direction: [n], [s], [e], [w], or [q] to quit\n')
+
+    # Setting player input to lowercase
     move_input = player_input.lower()
 
+    # Escape clause
     if move_input == 'q':
         player.playing = 0
         break
 
+    # Check if input is a cardinal direction
     if move_input in possible_moves:
-        current_room = getattr(room[player.room], possible_moves[move_input])
-        if current_room.name == room[player.room].name:
+
+        # Setting the new room to a variable based off of the current room and player input
+        new_room = getattr(player.room, possible_moves[move_input])
+
+        # Checking to see if the desired direction keeps you in the same room, or leads you to a new room
+        if new_room is player.room:
             clear_terminal()
             print('You cannot move in that direction!')
         else:
             clear_terminal()
-            print(f'{current_room.name} - \n{textwrap.fill(current_room.description, width=40)}')
+            print(f'{new_room.name} - \n{textwrap.fill(new_room.description, width=40)}')
+
+            # Setting the player's location to the new room
             for key in room:
-                if room[key] == current_room:
-                    player.room = key
+                if room[key] == new_room:
+                    player.room = room[key]
     else:
         clear_terminal()
         print('Invalid direction!')
