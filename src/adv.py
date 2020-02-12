@@ -53,6 +53,11 @@ room['treasure'].s_to = room['narrow']
 #
 # If the user enters "q", quit the game.
 
+
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 player = Player('treasure', playing=1)
 
 possible_moves = {
@@ -71,17 +76,17 @@ while player.playing == 1:
         player.playing = 0
         break
 
-    current_room = getattr(room[player.room], possible_moves[move_input])
-
-    if hasattr(current_room, possible_moves[move_input]):
-        if current_room.name != room[player.room].name:
+    if move_input in possible_moves:
+        current_room = getattr(room[player.room], possible_moves[move_input])
+        if current_room.name == room[player.room].name:
+            clear_terminal()
+            print('You cannot move in that direction!')
+        else:
+            clear_terminal()
             print(f'{current_room.name} - \n{textwrap.fill(current_room.description, width=40)}')
             for key in room:
-                print(f'{room[key]}')
-        else:
-            print('You cannot move in that direction!')
+                if room[key] == current_room:
+                    player.room = key
     else:
+        clear_terminal()
         print('Invalid direction!')
-
-
-
