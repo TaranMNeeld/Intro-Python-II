@@ -68,13 +68,20 @@ while player.playing == 1:
     move_input = player_input.lower()
 
     if move_input == 'q':
+        player.playing = 0
         break
 
-    attrs = vars(room[player.room])
+    current_room = getattr(room[player.room], possible_moves[move_input])
 
-    for attr in attrs:
-        print(f'{attr}')
+    if hasattr(current_room, possible_moves[move_input]):
+        if current_room.name != room[player.room].name:
+            print(f'{current_room.name} - \n{textwrap.fill(current_room.description, width=40)}')
+            for key in room:
+                print(f'{room[key]}')
+        else:
+            print('You cannot move in that direction!')
+    else:
+        print('Invalid direction!')
 
-    if hasattr(room[player.room], possible_moves['s']):
-        print(room[player.room].name)
+
 
