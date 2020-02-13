@@ -10,3 +10,4 @@ class Room:
         self.s_to = self
         self.e_to = self
         self.w_to = self
+        self.items = self

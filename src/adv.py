@@ -71,31 +71,33 @@ possible_moves = {
     'w': 'w_to'
 }
 
+# Initial location info display
+pretty.outline_info(username, 'Location: ' + player.current_room.name, player.current_room.description, 60)
+
 while player.playing == 1:
 
     # Getting player movement input
-    player_input = input('Enter a cardinal direction: [n], [s], [e], [w], or [q] to quit\n')
+    verb_input = input('Enter a cardinal direction: [n], [s], [e], [w], or [q] to quit\n')
 
     # Setting player input to lowercase
-    move_input = player_input.lower()
+    verb = verb_input.lower()
 
     # Escape clause
-    if move_input == 'q':
+    if verb == 'q':
         player.playing = 0
         break
 
     # Check if input is a cardinal direction
-    if move_input in possible_moves:
+    if verb in possible_moves:
 
         # Setting the new room to a variable based off of the current room and player input
-        new_room = getattr(player.current_room, possible_moves[move_input])
-
+        new_room = getattr(player.current_room, possible_moves[verb])
         # Checking to see if the desired direction keeps you in the same room, or leads you to a new room
         if new_room is player.current_room:
-            clear_terminal()
             print('You cannot move in that direction!')
         else:
             clear_terminal()
+            player.current_room = new_room
             pretty.outline_info(username, 'Location: ' + new_room.name, new_room.description, 60)
 
             # Setting the player's location to the new room
@@ -103,5 +105,4 @@ while player.playing == 1:
                 if room[key] == new_room:
                     player.current_room = room[key]
     else:
-        clear_terminal()
-        print('Invalid direction!')
+        print('Invalid command!')
