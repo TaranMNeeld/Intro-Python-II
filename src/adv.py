@@ -1,7 +1,7 @@
 import os
-import textwrap
 from room import Room
 from player import Player
+from prettier import Prettier
 
 # Declare all the rooms
 
@@ -54,11 +54,15 @@ room['treasure'].s_to = room['narrow']
 # If the user enters "q", quit the game.
 
 
+pretty = Prettier()
+
+
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-player = Player(room['outside'], playing=1)
+username = 'Taran'
+player = Player(username, room['outside'], playing=1)
 
 possible_moves = {
     'n': 'n_to',
@@ -69,7 +73,7 @@ possible_moves = {
 
 while player.playing == 1:
 
-    # Getting player input
+    # Getting player movement input
     player_input = input('Enter a cardinal direction: [n], [s], [e], [w], or [q] to quit\n')
 
     # Setting player input to lowercase
@@ -84,20 +88,20 @@ while player.playing == 1:
     if move_input in possible_moves:
 
         # Setting the new room to a variable based off of the current room and player input
-        new_room = getattr(player.room, possible_moves[move_input])
+        new_room = getattr(player.current_room, possible_moves[move_input])
 
         # Checking to see if the desired direction keeps you in the same room, or leads you to a new room
-        if new_room is player.room:
+        if new_room is player.current_room:
             clear_terminal()
             print('You cannot move in that direction!')
         else:
             clear_terminal()
-            print(f'{new_room.name} - \n{textwrap.fill(new_room.description, width=40)}')
+            pretty.outline_info(username, 'Location: ' + new_room.name, new_room.description, 60)
 
             # Setting the player's location to the new room
             for key in room:
                 if room[key] == new_room:
-                    player.room = room[key]
+                    player.current_room = room[key]
     else:
         clear_terminal()
         print('Invalid direction!')
