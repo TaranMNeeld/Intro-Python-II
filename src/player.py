@@ -8,3 +8,13 @@ class Player:
         self.current_room = current_room
         self.playing = playing
         self.inventory = inv
+
+    def take(self, item):
+        self.inventory.append(item)
+        self.current_room.remove(item)
+        item.on_take()
+
+    def drop(self, item):
+        self.current_room.append(item)
+        self.inventory.remove(item)
+        item.on_drop()

@@ -11,3 +11,12 @@ class Room:
         self.e_to = self
         self.w_to = self
         self.items = items
+
+    def get_items(self):
+        if len(self.items):
+            return print(f'You notice the following items: {[item.name for item in self.items]}')
+        else:
+            return print('The location is empty...')
+
+    def has_item(self, item):
+        return [item in self.items]
