@@ -64,13 +64,6 @@ def clear_terminal():
 username = 'Taran'
 player = Player(username, room['outside'], playing=1)
 
-possible_moves = {
-    'n': 'n_to',
-    's': 's_to',
-    'e': 'e_to',
-    'w': 'w_to'
-}
-
 # Initial location info display
 pretty.outline_info(username, 'Location: ' + player.current_room.name, player.current_room.description, 60)
 
@@ -88,10 +81,10 @@ while player.playing == 1:
         break
 
     # Check if input is a cardinal direction
-    if verb in possible_moves:
+    if verb in ['n', 's', 'e', 'w']:
 
         # Setting the new room to a variable based off of the current room and player input
-        new_room = getattr(player.current_room, possible_moves[verb])
+        new_room = getattr(player.current_room, f'{verb}_to')
         # Checking to see if the desired direction keeps you in the same room, or leads you to a new room
         if new_room is player.current_room:
             print('You cannot move in that direction!')

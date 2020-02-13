@@ -3,7 +3,8 @@
 
 
 class Player:
-    def __init__(self, name, current_room, playing):
+    def __init__(self, name, current_room, playing, inv=[]):
         self.name = name
         self.current_room = current_room
         self.playing = playing
+        self.inventory = inv
