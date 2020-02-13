@@ -1,4 +1,3 @@
-import os
 from room import Room
 from player import Player
 from item import Item
@@ -69,28 +68,29 @@ room['treasure'].s_to = room['narrow']
 
 pretty = Prettier()
 
-
-def clear_terminal():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-
 username = 'Taran'
-player = Player(username, room['outside'], playing=1)
+player = Player(username, room['outside'], playing=True, inv=[i for i in item])
 
 # Initial location info display
 pretty.outline_info(player, player.current_room, 60)
 
-while player.playing == 1:
+while player.playing:
 
     # Getting player movement input
-    verb_input = input('Enter a cardinal direction: [n], [s], [e], [w], or [q] to quit\n')
+    player_input = input('Enter a cardinal direction: [n], [s], [e], [w], or [q] to quit\n')
 
     # Setting player input to lowercase
-    verb = verb_input.lower()
+    split_input = player_input.lower().split(' ')
+
+    verb = split_input[0]
+    obj = ''
+
+    if len(split_input) == 2:
+        obj = split_input[1]
 
     # Escape clause
     if verb == 'q':
-        player.playing = 0
+        player.playing = False
         break
 
     # Check if input is a cardinal direction
@@ -102,12 +102,19 @@ while player.playing == 1:
         if new_room is player.current_room:
             print('You cannot move in that direction!')
         else:
-            clear_terminal()
+            pretty.clear_terminal()
             player.current_room = new_room
             pretty.outline_info(player, player.current_room, 60)
             # Setting the player's location to the new room
             for key in room:
                 if room[key] == new_room:
                     player.current_room = room[key]
+    elif verb in ['i', 'take', 'drop']:
+        if verb == 'i':
+            player.toggle_inventory()
+        elif verb == 'take':
+            pass
+        elif verb == 'drop':
+            pass
     else:
         print('Invalid command!')
