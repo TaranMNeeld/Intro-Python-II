@@ -12,7 +12,13 @@ class Prettier:
         title_underline = ''
         desc_underline = ''
 
-        empty = []
+        open_option = 'Enter [i] to open inventory:'
+        close_option = 'Enter [i] to close inventory:'
+
+        inventory = []
+
+        for item in player.inventory:
+            inventory.append(item.name)
 
         for letter in range(len(room.name) + len('Location: ')):
             title_underline += '~'
@@ -23,8 +29,9 @@ class Prettier:
         title = f'{title_underline}\nLocation: {room.name}\n{title_underline}'
         description = f'{room.description}\n{desc_underline}'
 
-        print(f'Hello, {player.name}! Enter [i] to open inventory:'
-              f'{player.inventory if player.inv_open else empty}\n'
+        print(f'Hello, {player.name}! {close_option if player.inv_open else open_option}'
+              f'{inventory if player.inv_open else "[]"}\n'
+              f'{"Enter [drop item_name] to add item to room" if player.inv_open else ""}\n'
               f'{title}\n{wrapper.fill(description)}')
         room.get_items()
 

@@ -12,14 +12,18 @@ class Player:
 
     def take(self, item):
         self.inventory.append(item)
-        self.current_room.remove(item)
+        self.current_room.items.remove(item)
         item.on_take()
 
     def drop(self, item):
-        self.current_room.append(item)
+        self.current_room.items.append(item)
         self.inventory.remove(item)
         item.on_drop()
 
     def toggle_inventory(self):
         self.inv_open = not self.inv_open
         return self.inv_open
+
+    def has_item(self, item):
+        print(f'{item}, {self.inventory}')
+        return [item in self.inventory]

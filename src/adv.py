@@ -68,8 +68,13 @@ room['treasure'].s_to = room['narrow']
 
 pretty = Prettier()
 
+def refresh_display():
+    pretty.clear_terminal()
+    pretty.outline_info(player, player.current_room, 60)
+
+
 username = 'Taran'
-player = Player(username, room['outside'], playing=True, inv=[i for i in item])
+player = Player(username, room['outside'], playing=True, inv=[])
 
 # Initial location info display
 pretty.outline_info(player, player.current_room, 60)
@@ -102,9 +107,8 @@ while player.playing:
         if new_room is player.current_room:
             print('You cannot move in that direction!')
         else:
-            pretty.clear_terminal()
             player.current_room = new_room
-            pretty.outline_info(player, player.current_room, 60)
+            refresh_display()
             # Setting the player's location to the new room
             for key in room:
                 if room[key] == new_room:
@@ -112,9 +116,18 @@ while player.playing:
     elif verb in ['i', 'take', 'drop']:
         if verb == 'i':
             player.toggle_inventory()
+            refresh_display()
         elif verb == 'take':
-            pass
+            if player.current_room.has_item(item[obj]):
+                player.take(item[obj])
+                refresh_display()
+            else:
+                print('That item is not available!')
         elif verb == 'drop':
-            pass
+            if player.has_item(item[obj]):
+                player.drop(item[obj])
+                refresh_display()
+            else:
+                print('You do not have this item!')
     else:
         print('Invalid command!')

@@ -14,7 +14,8 @@ class Room:
 
     def get_items(self):
         if len(self.items):
-            return print(f'You notice the following items: {[item.name for item in self.items]}')
+            return print(f'You notice the following items: {[item.name for item in self.items]}\n'
+                         f'Enter [take item_name] or...')
         else:
             return print('The location is empty...')
 
