@@ -27,3 +27,16 @@ class Player:
     def has_item(self, item):
         print(f'{item}, {self.inventory}')
         return item in self.inventory
+
+    def travel(self, verb, room):
+        # Setting the new room to a variable based off of the current room and player input
+        new_room = getattr(self.current_room, verb)
+        # Checking to see if the desired direction keeps you in the same room, or leads you to a new room
+        if new_room is self.current_room:
+            print('You cannot move in that direction!')
+        else:
+            self.current_room = new_room
+            # Setting the player's location to the new room
+            for key in room:
+                if room[key] == new_room:
+                    self.current_room = room[key]

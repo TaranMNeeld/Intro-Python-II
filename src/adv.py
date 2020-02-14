@@ -84,12 +84,12 @@ while player.playing:
     # Getting player movement input
     player_input = input('Enter a cardinal direction: [n], [s], [e], [w], or [q] to quit\n')
 
-    # Setting player input to lowercase
+    # Setting player input to lowercase and splitting it
     split_input = player_input.lower().split(' ')
 
+    # Separate words to be parsed individually
     verb = split_input[0]
     obj = ''
-
     if len(split_input) == 2:
         obj = split_input[1]
 
@@ -100,25 +100,16 @@ while player.playing:
 
     # Check if input is a cardinal direction
     if verb in ['n', 's', 'e', 'w']:
+        player.travel(f'{verb}_to', room)
+        refresh_display()
 
-        # Setting the new room to a variable based off of the current room and player input
-        new_room = getattr(player.current_room, f'{verb}_to')
-        # Checking to see if the desired direction keeps you in the same room, or leads you to a new room
-        if new_room is player.current_room:
-            print('You cannot move in that direction!')
-        else:
-            player.current_room = new_room
-            refresh_display()
-            # Setting the player's location to the new room
-            for key in room:
-                if room[key] == new_room:
-                    player.current_room = room[key]
-
+    # Check if input is an action
     elif verb in ['i', 'take', 'drop']:
         if verb == 'i':
             player.toggle_inventory()
             refresh_display()
 
+        # If current room contains specified item, then add it to inventory
         elif verb == 'take':
             try:
                 if player.current_room.has_item(item[obj]):
@@ -129,6 +120,7 @@ while player.playing:
             except KeyError:
                 print('That item is not available')
 
+        # If player has item, then drop it
         elif verb == 'drop':
             if player.has_item(item[obj]):
                 player.drop(item[obj])
