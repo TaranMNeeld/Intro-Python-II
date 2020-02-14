@@ -113,21 +113,28 @@ while player.playing:
             for key in room:
                 if room[key] == new_room:
                     player.current_room = room[key]
+
     elif verb in ['i', 'take', 'drop']:
         if verb == 'i':
             player.toggle_inventory()
             refresh_display()
+
         elif verb == 'take':
-            if player.current_room.has_item(item[obj]):
-                player.take(item[obj])
-                refresh_display()
-            else:
-                print('That item is not available!')
+            try:
+                if player.current_room.has_item(item[obj]):
+                    player.take(item[obj])
+                    refresh_display()
+                else:
+                    print('That item is not available')
+            except KeyError:
+                print('That item is not available')
+
         elif verb == 'drop':
             if player.has_item(item[obj]):
                 player.drop(item[obj])
                 refresh_display()
             else:
                 print('You do not have this item!')
+
     else:
         print('Invalid command!')

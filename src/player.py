@@ -26,4 +26,4 @@ class Player:
 
     def has_item(self, item):
         print(f'{item}, {self.inventory}')
-        return [item in self.inventory]
+        return item in self.inventory

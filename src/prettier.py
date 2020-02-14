@@ -5,8 +5,11 @@ from player import Player
 
 class Prettier:
 
-    def outline_info(self, player, room, width):
+    def clear_terminal(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
 
+    def outline_info(self, player, room, width):
+        self.clear_terminal()
         wrapper = textwrap.TextWrapper(width)
 
         title_underline = ''
@@ -31,9 +34,6 @@ class Prettier:
 
         print(f'Hello, {player.name}! {close_option if player.inv_open else open_option}'
               f'{inventory if player.inv_open else "[]"}\n'
-              f'{"Enter [drop item_name] to add item to room" if player.inv_open else ""}\n'
+              f'{"! Enter [drop item_name] to add item to room" if player.inv_open else ""}\n'
               f'{title}\n{wrapper.fill(description)}')
         room.get_items()
-
-    def clear_terminal(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
